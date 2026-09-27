@@ -1,0 +1,38 @@
+name: VM2 config order gate
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  vm2-config-order-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Detect scopes with official Mergify action
+        id: mergify-scopes
+        uses: Mergifyio/gha-mergify-ci@v25
+        with:
+          action: scopes
+
+      - name: Show scope output
+        shell: bash
+        env:
+          SCOPES: ${{ steps.mergify-scopes.outputs.scopes }}
+        run: |
+          echo "VM2_SCOPES=$SCOPES"
+
+      - name: Enforce trusted critical invariant
+        if: fromJSON(steps.mergify-scopes.outputs.scopes).critical == 'true'
+        shell: bash
+        run: |
+          echo "VM2_CRITICAL_INVARIANT_ACTIVE=true"
+          if test -f security/unsafe.txt; then
+            echo "VM2_CRITICAL_INVARIANT_FAIL=true"
+            exit 1
+          fi
