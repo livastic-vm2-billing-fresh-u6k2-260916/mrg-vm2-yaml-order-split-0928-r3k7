@@ -1,0 +1,16 @@
+scopes:
+  source:
+    files:
+      critical:
+        include:
+          - "security/**"
+
+pull_request_rules:
+  - name: VM2 config-order critical merge
+    conditions:
+      - scope = critical
+      - check-success = vm2-config-order-gate
+      - -mergify-configuration-changed
+    actions:
+      merge:
+        method: merge
