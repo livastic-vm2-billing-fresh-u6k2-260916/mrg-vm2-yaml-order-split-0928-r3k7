@@ -10,6 +10,7 @@ pull_request_rules:
     conditions:
       - scope = critical
       - check-success = vm2-config-order-gate
+      - label = VM2_V26_RELEASE_1005
       - -mergify-configuration-changed
     actions:
       merge:
