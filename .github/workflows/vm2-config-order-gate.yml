@@ -16,7 +16,7 @@ jobs:
 
       - name: Detect scopes with official Mergify action
         id: mergify-scopes
-        uses: Mergifyio/gha-mergify-ci@v25
+        uses: Mergifyio/gha-mergify-ci@v26
         with:
           action: scopes
 
